@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{f3322d0b-5254-4cb7-b64f-b442e70b033b}</ProjectGuid>
-    <RootNamespace>Imageprocessing</RootNamespace>
+    <ProjectGuid>{51a0fd29-600c-45ff-8d2c-bf0ee51cc4b3}</ProjectGuid>
+    <RootNamespace>FileInputOutput</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="File_InputOutput.c" />
+    <ClCompile Include="fileinputoutput.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
