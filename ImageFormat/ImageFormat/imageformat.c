@@ -25,13 +25,14 @@ int main(int argc, char* argv[]) {
 	fread(inputImg, sizeof(unsigned char), size, inputFile);
 
 	//Original Copy
-	/*for (int j = 0; j < height; j++) {
+
+	for (int j = 0; j < height; j++) {
 		for (int i = 0; i < width; i++) {
 			outputImg[j * stride + 3 * i + 0] = inputImg[j * stride + 3 * i + 0];
 			outputImg[j * stride + 3 * i + 1] = inputImg[j * stride + 3 * i + 1];
 			outputImg[j * stride + 3 * i + 2] = inputImg[j * stride + 3 * i + 2];
 		}
-	}*/
+	}
 
 	/*for (int j = 0; j < height; j++) {
 		for (int i = 0; i < width; i++) {
@@ -53,17 +54,17 @@ int main(int argc, char* argv[]) {
 		}
 	}*/
 
-	for (int j = 0; j < height; j++) {
-		for (int i = 0; i < width; i++) {
-			outputImg[j * stride + 3 * i + 0] = inputImg[j * stride + 3 * i + 2];	//output B
-			outputImg[j * stride + 3 * i + 1] = inputImg[j * stride + 3 * i + 1];	//output G
-			outputImg[j * stride + 3 * i + 2] = inputImg[j * stride + 3 * i + 0];	//output R
-		}
-	}
+	//for (int j = 0; j < height; j++) {
+	//	for (int i = 0; i < width; i++) {
+	//		outputImg[j * stride + 3 * i + 0] = inputImg[j * stride + 3 * i + 2];	//output B
+	//		outputImg[j * stride + 3 * i + 1] = inputImg[j * stride + 3 * i + 1];	//output G
+	//		outputImg[j * stride + 3 * i + 2] = inputImg[j * stride + 3 * i + 0];	//output R
+	//	}
+	//}
 
-	//FILE* outputFile = fopen("Output.bmp", "wb");
-	//FILE* outputFile = fopen("Output(1).bmp", "wb");
-	FILE* outputFile = fopen("Output(2).bmp", "wb");
+	FILE* outputFile = fopen("Output.bmp", "wb");
+	//FILE* outputFile = fopen("Output_1.bmp", "wb");
+	//FILE* outputFile = fopen("Output_2.bmp", "wb");
 	fwrite(&bmpFile, sizeof(BITMAPFILEHEADER), 1, outputFile);
 	fwrite(&bmpInfo, sizeof(BITMAPINFOHEADER), 1, outputFile);
 	fwrite(outputImg, sizeof(unsigned char), size, outputFile);

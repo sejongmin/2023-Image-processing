@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="image_format.c">
+    <ClCompile Include="imageformat.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
