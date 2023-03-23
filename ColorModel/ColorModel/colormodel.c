@@ -31,10 +31,12 @@ int main(int argc, char* argv[]) {
 			Y = 0.299 * inputImg[j * stride + 3 * i + 2] + 0.587 * inputImg[j * stride + 3 * i + 1] + 0.114 * inputImg[j * stride + 3 * i + 0];
 			Cb = -0.169 * inputImg[j * stride + 3 * i + 2] - 0.331 * inputImg[j * stride + 3 * i + 1] + 0.500 * inputImg[j * stride + 3 * i + 0];
 			Cr = 0.500 * inputImg[j * stride + 3 * i + 2] - 0.419 * inputImg[j * stride + 3 * i + 1] - 0.0813 * inputImg[j * stride + 3 * i + 0];
+			
+			Y += 100;
 
-			R = (Y+100)+ 1.402 * Cr;
-			G = (Y+100) - 0.714 * Cr - 0.344 * Cb;
-			B = (Y+100) + 1.772 * Cb;
+			R = Y + 1.402 * Cr;
+			G = Y - 0.714 * Cr - 0.344 * Cb;
+			B = Y + 1.772 * Cb;
 
 			I = (unsigned char)((inputImg[j * stride + 3 * i + 2] + inputImg[j * stride + 3 * i + 1] + inputImg[j * stride + 3 * i + 0]) / 3);
 
