@@ -44,9 +44,11 @@ int main(int argc, char* argv[]) {
 	for (int j = 1; j < height-1; j++) {
 		for (int i = 1; i < width-1; i++) {
 			Gx = (Y1[j * width + i + 1] - Y1[j * width + i - 1]) / 2;
-			Y3[j * width + i] = (unsigned char)(Gx > 127 ? 255 : (Gx < 0 ? 0 : Gx));
+			Gx = abs(Gx);
+;			Y3[j * width + i] = (unsigned char)(Gx > 127 ? 255 : (Gx < 0 ? 0 : Gx));
 
 			Gy = (Y1[(j + 1) * width + i] - Y1[(j - 1) * width + i]) / 2;
+			Gy = abs(Gy);
 			Y4[j * width + i] = (unsigned char)(Gy > 127 ? 255 : (Gy < 0 ? 0 : Gy));
 
 			G = sqrt(Gx * Gx + Gy * Gy);
