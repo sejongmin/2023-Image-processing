@@ -38,25 +38,58 @@ int main(int argc, char* argv[]) {
 			Y1[j * width + i] = inputImg[j * stride + 3 * i + 0];
 		}
 	}
-	double Gx, Gy;
-	double G;
+	
+	int sobel_X[3][3] = { {-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1} };
+	int sobel_Y[3][3] = { {-1, -2, -1}, {0, 0, 0}, {1, 2, 1} };
+	int prewitt_X[3][3] = { {-1, 0, 1}, {-1, 0, 1}, {-1, 0, 1} };
+	int prewitt_Y[3][3] = { {-1, -1, -1}, {0, 0, 0}, {1, 1, 1} };
+	int roberts_X[2][2] = { {-1, 0}, {0, 1} };
+	int roberts_Y[2][2] = { {0, -1}, {1, 0} };
 
-	for (int j = 1; j < height-1; j++) {
-		for (int i = 1; i < width-1; i++) {
-			Gx = (Y1[j * width + i + 1] - Y1[j * width + i - 1]) / 2;
-			Gx = abs(Gx);
-;			Y3[j * width + i] = (unsigned char)(Gx > 127 ? 255 : (Gx < 0 ? 0 : Gx));
+	double Gx, Gy, G;
 
-			Gy = (Y1[(j + 1) * width + i] - Y1[(j - 1) * width + i]) / 2;
-			Gy = abs(Gy);
-			Y4[j * width + i] = (unsigned char)(Gy > 127 ? 255 : (Gy < 0 ? 0 : Gy));
-
+	for (int j = 1; j < height - 1; j++) {
+		for (int i = 1; i < width - 1; i++) {
+			Gx = 0;
+			Gy = 0;
+			for (int y = 0; y < 3; y++) {
+				for (int x = 0; x < 3; x++) {
+					Gx += Y1[(j + y - 1) * width + (i + x - 1)] * sobel_X[y][x];
+					Gy += Y1[(j + y - 1) * width + (i + x - 1)] * sobel_Y[y][x];
+				}
+			}
 			G = sqrt(Gx * Gx + Gy * Gy);
-			Y2[j * width + i] = (unsigned char)(G > 255 ? 255 : (G < 0 ? 0 : 0));
+			Y2[j * width + i] = (unsigned char)(G > 255 ? 255 : (G < 0 ? 0 : G));
 		}
 	}
 
+	for (int j = 1; j < height - 1; j++) {
+		for (int i = 1; i < width - 1; i++) {
+			double Gx = 0, Gy = 0;
+			for (int y = 0; y < 3; y++) {
+				for (int x = 0; x < 3; x++) {
+					Gx += Y1[(j + y - 1) * width + (i + x - 1)] * prewitt_X[y][x];
+					Gy += Y1[(j + y - 1) * width + (i + x - 1)] * prewitt_Y[y][x];
+				}
+			}
+			double G = sqrt(Gx * Gx + Gy * Gy);
+			Y3[j * width + i] = (unsigned char)(G > 255 ? 255 : (G < 0 ? 0 : G));
+		}
+	}
 
+	for (int j = 0; j < height - 1; j++) {
+		for (int i = 0; i < width - 1; i++) {
+			double Gx = 0, Gy = 0;
+			for (int y = 0; y < 2; y++) {
+				for (int x = 0; x < 2; x++) {
+					Gx += Y1[(j + y) * width + i + x] * roberts_X[y][x];
+					Gy += Y1[(j + y) * width + i + x] * roberts_Y[y][x];
+				}
+			}
+			double G = sqrt(Gx * Gx + Gy * Gy);
+			Y4[j * width + i] = (unsigned char)(G > 255 ? 255 : (G < 0 ? 0 : G));
+		}
+	}
 
 	for (int j = 0; j < height; j++) {
 		for (int i = 0; i < width; i++) {
@@ -82,19 +115,19 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	FILE* outputFile1 = NULL, *outputFile2 = NULL, *outputFile3 = NULL;
+	FILE* outputFile1 = NULL, * outputFile2 = NULL, * outputFile3 = NULL;
 
-	outputFile1 = fopen("AICenterY_Edge.bmp", "wb");
+	outputFile1 = fopen("AICenterY_Sobel.bmp", "wb");
 	fwrite(&bmpFile, sizeof(BITMAPFILEHEADER), 1, outputFile1);
 	fwrite(&bmpInfo, sizeof(BITMAPINFOHEADER), 1, outputFile1);
 	fwrite(outputImg1, sizeof(unsigned char), size, outputFile1);
 
-	outputFile2 = fopen("AICenterY_x.bmp", "wb");
+	outputFile2 = fopen("AICenterY_Prewitt.bmp", "wb");
 	fwrite(&bmpFile, sizeof(BITMAPFILEHEADER), 1, outputFile2);
 	fwrite(&bmpInfo, sizeof(BITMAPINFOHEADER), 1, outputFile2);
 	fwrite(outputImg2, sizeof(unsigned char), size, outputFile2);
 
-	outputFile3 = fopen("AICenterY_y.bmp", "wb");
+	outputFile3 = fopen("AICenterY_Roberts.bmp", "wb");
 	fwrite(&bmpFile, sizeof(BITMAPFILEHEADER), 1, outputFile3);
 	fwrite(&bmpInfo, sizeof(BITMAPINFOHEADER), 1, outputFile3);
 	fwrite(outputImg3, sizeof(unsigned char), size, outputFile3);
@@ -103,7 +136,7 @@ int main(int argc, char* argv[]) {
 	free(outputImg1);
 	free(outputImg2);
 	free(outputImg3);
-	free(Y1); 
+	free(Y1);
 	free(Y2);
 	free(Y3);
 	free(Y4);
