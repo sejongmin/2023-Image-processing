@@ -36,17 +36,15 @@ int main(int argc, char* argv[]) {
 	}
 
 	int p = 0;
-	
-	/*for (int j = 0; j < height; j++) {
-		for (int i = 0; i < width; i++) {
-			if (i == 0) {
-				p = 128;
-				e[j * width + i] = Y[j * width + i] - p;
-			}
-			else {
-				p += e[j * width + i - 1];
-				e[j * width + i] = Y[j * width + i] - p;
-			}
+
+	/*
+	for (int j = 0; j < height; j++) {
+		p = 128;
+		e[j * width] = Y[j * width] - p;
+		for (int i = 1; i < width; i++) {
+			p += e[j * width + i - 1];
+			e[j * width + i] = Y[j * width + i] - p;
+
 			e[j * width + i] = e[j * width + i] / 5 * 5;
 		}
 	}
@@ -69,15 +67,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	for (int j = 0; j < height; j++) {
-		for (int i = 0; i < width; i++) {
-			if (i == 0) {
-				p = 128;
-				Y1[j * width + i] = p + e[j * width + i];
-			}
-			else {
-				p = p + e[j * width + i - 1];
-				Y1[j * width + i] = p + e[j * width + i];
-			}
+		p = 128;
+		Y1[j * width] = p + e[j * width];
+		for (int i = 1; i < width; i++) {
+			p = p + e[j * width + i - 1];
+			Y1[j * width + i] = p + e[j * width + i];
 		}
 	}
 
@@ -109,6 +103,6 @@ int main(int argc, char* argv[]) {
 	free(outputImg);
 	fclose(inputFile);
 	fclose(outputFile);
-
+	
 	return 0;
 }
