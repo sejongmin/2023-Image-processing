@@ -37,30 +37,42 @@ int main(int argc, char* argv[]) {
 	}
 
 	int p = 0;
-	char* bi = (char*)malloc(4 * sizeof(char));
-
-	/*for (int j = 0; j < height; j++) {
+	char* bi = (char*)malloc(sizeof(char) * 4);
+	int ee;
+	/*
+	for (int j = 0; j < height; j++) {
 		p = 128;
-		e[j * width] = Y[j * width] - p;
+		ee = Y[j * width] - p;
+		ee = ee / 5;
+
+		if (ee < -3) e[j * width] = -4;
+		else if (ee > 2) e[j * width] = 3;
+		else e[j * width] = ee;
+
 		for (int i = 1; i < width; i++) {
-			p += e[j * width + i - 1];
-			e[j * width + i] = Y[j * width + i] - p;
-			e[j * width + i] = e[j * width + i] / 5 * 5;
+			p = p + e[j * width + i - 1] * 5;
+			ee = Y[j * width + i] - p;
+			ee = ee / 5;
+
+			if (ee < -3) e[j * width + i] = -4;
+			else if (ee > 2) e[j * width + i] = 3;
+			else e[j * width + i] = ee;
 		}
 	}
 
 	FILE* text = fopen("bitstream.txt", "w");
 	for (int j = 0; j < height; j++) {
 		for (int i = 0; i < width; i++) {
+			ee = e[j * width + i];
 
-			if (e[j * width + i] / 5 < -3) bi = "000";
-			else if (e[j * width + i] / 5 == -3) bi = "001";
-			else if (e[j * width + i] / 5 == -2) bi = "010";
-			else if (e[j * width + i] / 5 == -1) bi = "011";
-			else if (e[j * width + i] / 5 == 1) bi = "101";
-			else if (e[j * width + i] / 5 == 0) bi = "100";
-			else if (e[j * width + i] / 5 == 2) bi = "110";
-			else if (e[j * width + i] / 5 > 2) bi = "111";
+			if (ee < -3) bi = "000";
+			else if (ee == -3) bi = "001";
+			else if (ee == -2) bi = "010";
+			else if (ee == -1) bi = "011";
+			else if (ee == 1) bi = "101";
+			else if (ee == 0) bi = "100";
+			else if (ee == 2) bi = "110";
+			else if (ee > 2) bi = "111";
 
 			fprintf(text, "%s ", bi);
 		}
@@ -71,26 +83,25 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < width; i++) {
 			fscanf(text, "%s", bi);
 
-			if (strcmp(bi, "000") == 0) e[j * width + i] = -4;
-			if (strcmp(bi, "001") == 0) e[j * width + i] = -3;
-			if (strcmp(bi, "010") == 0) e[j * width + i] = -2;
-			if (strcmp(bi, "011") == 0) e[j * width + i] = -1;
-			if (strcmp(bi, "100") == 0) e[j * width + i] = 0;
-			if (strcmp(bi, "101") == 0) e[j * width + i] = 1;
-			if (strcmp(bi, "110") == 0) e[j * width + i] = 2;
-			if (strcmp(bi, "111") == 0) e[j * width + i] = 3;
+			if (strcmp(bi, "000") == 0) ee = -4;
+			else if (strcmp(bi, "001") == 0) ee = -3;
+			else if (strcmp(bi, "010") == 0) ee = -2;
+			else if (strcmp(bi, "011") == 0) ee = -1;
+			else if (strcmp(bi, "100") == 0) ee = 0;
+			else if (strcmp(bi, "101") == 0) ee = 1;
+			else if (strcmp(bi, "110") == 0) ee = 2;
+			else if (strcmp(bi, "111") == 0) ee = 3;
 
-			e[j * width + i] *= 5;
+			e[j * width + i] = ee;
 		}
 	}
 
 	for (int j = 0; j < height; j++) {
 		p = 128;
-		Y1[j * width] = p + e[j * width];
+		Y1[j * width] = p + e[j * width] * 5;
 		for (int i = 1; i < width; i++) {
-			p = p + e[j * width + i - 1];
-			Y1[j * width + i] = p + e[j * width + i];
-			printf("[%d]", Y1[j * width + i]);
+			p = p + e[j * width + i - 1] * 5;
+			Y1[j * width + i] = p + e[j * width + i] * 5;
 		}
 	}
 
